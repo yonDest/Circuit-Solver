@@ -188,7 +188,8 @@ static float resistor_inductor(void) {
  *           Xl = 2*pi*f*L,   Xc = 1 / (2*pi*f*C)
  *           |Z| = |Xl - Xc|
  *
- *         Impedance is zero at resonant frequency f0 = 1 / (2*pi*sqrt(L*C)).
+ *         At resonance (f0), Xl = Xc so |Z| = 0 — the circuit is a short.
+ *         f0 = 1 / (2*pi*sqrt(L*C))
  *
  * @return Impedance magnitude in Ohms.
  */
@@ -201,7 +202,7 @@ static float inductor_capacitor(void) {
     float xc = 1.0f / (TWO_PI * f * C);
     float f0 = 1.0f / (TWO_PI * sqrtf(L * C));
 
-    printf("  (Resonant frequency: %.4f Hz)\n", f0);
+    printf("  (Resonant frequency: %.4f Hz — |Z| = 0 at this frequency)\n", f0);
     return fabsf(xl - xc);
 }
 
@@ -209,6 +210,9 @@ static float inductor_capacitor(void) {
  * @brief  Series RLC circuit:
  *           Xl = 2*pi*f*L,   Xc = 1 / (2*pi*f*C)
  *           |Z| = sqrt(R^2 + (Xl - Xc)^2)
+ *         At resonance (f0), Xl = Xc so |Z| = R — the minimum possible impedance.
+ *         Unlike a pure LC circuit, resistance prevents |Z| from reaching zero.
+ *         f0 = 1 / (2*pi*sqrt(L*C))
  *
  * @return Impedance magnitude in Ohms.
  */
@@ -223,7 +227,7 @@ static float resistor_inductor_capacitor(void) {
     float net = xl - xc;
     float f0  = 1.0f / (TWO_PI * sqrtf(L * C));
 
-    printf("  (Resonant frequency: %.4f Hz)\n", f0);
+    printf("  (Resonant frequency: %.4f Hz — |Z| is minimum (= R) at this frequency)\n", f0);
     return sqrtf(R * R + net * net);
 }
 
